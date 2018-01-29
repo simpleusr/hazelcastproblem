@@ -8,22 +8,22 @@ import com.hazelcast.nio.serialization.PortableWriter;
 
 public class MapValue implements Portable {
 
-    private Integer           data;
+    private Long           data;
 
     public MapValue() {
 
     }
 
-    public MapValue(Integer data) {
+    public MapValue(Long data) {
         this.data = data;
     }
     
 
-    public Integer getData() {
+    public Long getData() {
         return data;
     }
 
-    public void setData(Integer data) {
+    public void setData(Long data) {
         this.data = data;
     }
 
@@ -45,7 +45,7 @@ public class MapValue implements Portable {
     @Override
     public void readPortable(PortableReader reader) throws IOException {
         if (reader.readBoolean("_has__data")) {
-            data = reader.readInt("data");
+            data = reader.readLong("data");
         }
 
     }
@@ -55,7 +55,7 @@ public class MapValue implements Portable {
 
         boolean hasData = (data != null);
         if (hasData) {
-            writer.writeInt("data", data);
+            writer.writeLong("data", data);
         }
         
         writer.writeBoolean("_has__data", hasData);
