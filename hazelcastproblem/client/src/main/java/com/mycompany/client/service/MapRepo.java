@@ -1,5 +1,6 @@
 package com.mycompany.client.service;
 
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,9 @@ import com.mycompany.common.MapValue;
 import com.mycompany.common.MyEntryProcessor;
 
 @Service
-public class MapRepo {
+public class MapRepo implements InitializingBean {
+    
+    private long startIndex;
 
     @Autowired
     private HazelcastInstance hazelcastClient;
@@ -24,7 +27,7 @@ public class MapRepo {
         
         for (int i = 0; i < elementCount; i++) {
             String key = "key"+i;
-            MapValue value = new MapValue(i);
+            MapValue value = new MapValue(startIndex + i);
             hzlMap.executeOnKey(key, new MyEntryProcessor(value));
         }
 
@@ -32,6 +35,12 @@ public class MapRepo {
 
     private IMap<String, MapValue> getMap() {
         return hazelcastClient.getMap("hazelcastProblemMap");
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        startIndex = System.currentTimeMillis();
+        
     }
 
 }
