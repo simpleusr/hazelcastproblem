@@ -34,8 +34,9 @@ public class MyEntryProcessor extends AbstractEntryProcessor<String, MapValue> i
         if (null == entry.getValue()) {
             valueToSet = mapValue;
         } else {
-            MapValue currentValue = entry.getValue();
-            currentValue.setData(mapValue.getData());
+            MapValue valueToUpdate = entry.getValue();
+            valueToUpdate.setData(mapValue.getData());
+            valueToSet = valueToUpdate;
         }
 
         entry.setValue(valueToSet);
